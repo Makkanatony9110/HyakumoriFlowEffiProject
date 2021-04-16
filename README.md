@@ -1,2 +1,2 @@
 # HyakumoriFlowEffiProject
-This repository is gonna be running to construct database system in Hyakumori Ltd.
+This repository is gonna run to construct database system incorporated in Hyakumori Ltd.
