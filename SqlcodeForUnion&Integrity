@@ -1,0 +1,22 @@
+## グラップル選木データ&リフト選木データの結合 ##
+
+SELECT * INTO [(QUERY)村外運材_検索_結合]
+FROM (
+SELECT 商品名,商品_ID FROM [(INPUT)グラップル選木詳細_XL入力用]
+ORDER BY 商品_ID
+UNION 
+SELECT 商品名,商品_ID FROM [(INPUT)リフト選木詳細_XL入力用]
+ORDER BY 商品_ID
+);
+
+## その後、生成されたテーブルを参照し、前後の月の村外運材マスタにおいて商品_IDの確認が必要となる商品データの整合性を確認##
+
+SELECT [(MASTER)商品].商品_ID, [(MASTER)商品].商品名, [(QUERY)村外運材_検索_結合].商品_ID, [(QUERY)村外運材_検索_結合].商品名
+FROM [(QUERY)村外運材_検索_結合] INNER JOIN [(MASTER)商品] ON [(QUERY)村外運材_検索_結合].商品名 = [(MASTER)商品].商品名
+WHERE [(MASTER)商品].商品名 IN("ヒノキ合板16下FSC","ヒノキ合板16下非FSC","ヒノキ合板18上FSC","ヒノキ合板18上非FSC","スギ合板16下FSC","スギ合板16下非FSC","スギ合板18上FSC","スギ合板18上非FSC","チップ")
+GROUP BY [(MASTER)商品].商品_ID, [(MASTER)商品].商品名, [(QUERY)村外運材_検索_結合].商品_ID, [(QUERY)村外運材_検索_結合].商品名
+HAVING ((([(MASTER)商品].商品_ID) Like [何月ですか？(前月を2桁入力)] & "*") AND (([(QUERY)村外運材_検索_結合].商品_ID) Like [何月ですか？(当月を2桁入力)] & "*"));
+
+
+
+
