@@ -1,0 +1,34 @@
+SELECT [(INPUT)日新カウント].日新品目_ID, [(MASTER)日新品目].品目名, [(INPUT)日新カウント].長さ, CInt(Nz(Sum([14]),0)) AS 数量1, CInt(Nz(Sum([16]),0)) AS 数量2, CInt(Nz(Sum([18]),0)) AS 数量3, CInt(Nz(Sum([20]),0)) AS 数量4, CInt(Nz(Sum([22]),0)) AS 数量5, CInt(Nz(Sum([24]),0)) AS 数量6, CInt(Nz(Sum([26]),0)) AS 数量7, CInt(Nz(Sum([28]),0)) AS 数量8, CInt(Nz(Sum([30]),0)) AS 数量9, CInt(Nz(Sum([32]),0)) AS 数量10, CInt(Nz(Sum([34]),0)) AS 数量11, CInt(Nz(Sum([36]),0)) AS 数量12, CInt(Nz(Sum([38]),0)) AS 数量13, CInt(Nz(Sum([40]),0)) AS 数量14, Format([日付],"yyyymm") AS 日付選択 INTO [(QUERY)月次販売データ_日新1]
+FROM [(MASTER)日新品目] INNER JOIN [(INPUT)日新カウント] ON [(MASTER)日新品目].日新品目_ID = [(INPUT)日新カウント].日新品目_ID
+GROUP BY [(INPUT)日新カウント].日新品目_ID, [(MASTER)日新品目].品目名, [(INPUT)日新カウント].長さ, Format([日付],"yyyymm")
+HAVING (((Format([日付],"yyyymm")) Between [日新 From yyyymm] And [日新 To yyyymm]));
+
+SELECT 月次販売データ_日新2.日新品目_ID, 月次販売データ_日新2.品目名, 月次販売データ_日新2.末口, 月次販売データ_日新2.長さ, 月次販売データ_日新2.数量 INTO [(QUERY)月次販売データ_日新2]
+FROM (SELECT 日新品目_ID, 品目名,"14cm" AS 末口, 長さ, 数量1 AS 数量,1 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"16cm" AS 末口,長さ, 数量2,2 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"18cm" AS 末口, 長さ, 数量3,3 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"20cm" AS 末口, 長さ, 数量4,4 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"22cm" AS 末口, 長さ, 数量5,5 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"24cm" AS 末口, 長さ, 数量6,6 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"26cm" AS 末口, 長さ, 数量7,7 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"28cm" AS 末口, 長さ, 数量8,8 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"30cm" AS 末口, 長さ, 数量9,9 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"32cm" AS 末口, 長さ, 数量10,10 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"34cm" AS 末口, 長さ, 数量11,11 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"36cm" AS 末口, 長さ, 数量12,12 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"38cm" AS 末口, 長さ, 数量13,13 AS 連番 FROM [(QUERY)月次販売データ_日新1] 
+UNION 
+SELECT 日新品目_ID, 品目名,"40cm" AS 末口, 長さ, 数量14,14 AS 連番 FROM [(QUERY)月次販売データ_日新1])  AS 月次販売データ_日新2
+ORDER BY 月次販売データ_日新2.日新品目_ID, 月次販売データ_日新2.末口, 月次販売データ_日新2.長さ, 月次販売データ_日新2.連番;
